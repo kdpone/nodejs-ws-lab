@@ -32,7 +32,7 @@ function setupWSServer(server) {
     server,
     autoAcceptConnections: false
   });
-  let actorCoordinates = { x: 100, y: 100 };
+  /* let actorCoordinates = { x: 100, y: 100 };
   wss.on("connection", (ws) => {
     ws.on("message", (rawMsg) => {
       console.log(`RECV: ${rawMsg}`);
@@ -44,6 +44,18 @@ function setupWSServer(server) {
       })
     });
     ws.send(JSON.stringify(actorCoordinates));
+  }); */
+  let actorCoordinates = { };
+  wss.on("connection", (ws) => {
+    ws.on("message", (rawMsg) => {
+      console.log(`RECV: ${rawMsg}`);
+      const incommingMessage = JSON.parse(rawMsg);
+      actorCoordinates[incommingMessage.id] = {
+        x: incommingMessage.x,
+        y: incommingMessage.y,
+        frame: incommingMessage.frame
+      }
+    })
   });
   wss.on("listening", () => {
     const addr = server.address();
